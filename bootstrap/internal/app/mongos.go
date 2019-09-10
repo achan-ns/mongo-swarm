@@ -1,4 +1,4 @@
-package main
+package app
 
 import (
 	"fmt"
@@ -10,8 +10,8 @@ import (
 )
 
 type Mongos struct {
-	Address       string
-	ReplicaSetUrl string
+	Address        string
+	ReplicaSetUrls []string
 }
 
 func (m *Mongos) Init() error {
@@ -24,10 +24,11 @@ func (m *Mongos) Init() error {
 	defer session.Close()
 	session.SetMode(mgo.Monotonic, true)
 
-	result := bson.M{}
-	if err := session.Run(bson.M{"addShard": m.ReplicaSetUrl}, &result); err != nil {
-		return errors.Wrapf(err, "%v addShard failed", m.Address)
+	for _, replicaSet := range m.ReplicaSetUrls {
+		result := bson.M{}
+		if err := session.Run(bson.M{"addShard": replicaSet}, &result); err != nil {
+			return errors.Wrapf(err, "%v addShard failed", m.Address)
+		}
 	}
-
 	return nil
 }

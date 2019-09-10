@@ -1,4 +1,4 @@
-package main
+package app
 
 import (
 	"strings"
@@ -7,7 +7,7 @@ import (
 )
 
 type Config struct {
-	DataSet   string
+	DataSets  []string // we support sharding, so each element in here is a dataset
 	ConfigSet string
 	Mongos    string
 	Retry     int

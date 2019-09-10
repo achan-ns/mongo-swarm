@@ -15,11 +15,9 @@ RUN apk add --no-cache git
 # configure git to use token
 RUN git config --global url."https://achan-ns:${GITHUB_TOKEN}@github.com/".insteadOf "https://github.com/"
 
-RUN go mod download
-
 # ENTRYPOINT go run -v github.com/achan-ns/mongo-swarm/bootstrap
 RUN go build -ldflags "-X main.version=$APP_VERSION" \
-    -o /tmp/bootstrap github.com/achan-ns/mongo-swarm/bootstrap
+    -o /tmp/bootstrap github.com/achan-ns/mongo-swarm/bootstrap-2
 
 # RUN echo "done"
 

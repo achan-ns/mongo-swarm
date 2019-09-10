@@ -1,13 +1,14 @@
-package main
+package app
 
 import (
 	"fmt"
 	"time"
 
 	"github.com/pkg/errors"
-	"github.com/sirupsen/logrus"
 	"gopkg.in/mgo.v2"
 	"gopkg.in/mgo.v2/bson"
+
+	"github.com/netSkope/service/libs/common/go/logging"
 )
 
 type ReplicaSet struct {
@@ -38,7 +39,7 @@ func (r *ReplicaSet) init() error {
 	result := bson.M{}
 	if err := session.Run(bson.M{"replSetInitiate": config}, &result); err != nil {
 		if err.Error() == "already initialized" {
-			logrus.Warnf("%v replica set already initialized", r.Name)
+			logging.GetLogger().Warnf("%v replica set already initialized", r.Name)
 		} else {
 			return errors.Wrapf(err, "%v replSetInitiate failed", r.Name)
 		}
@@ -53,7 +54,7 @@ func (r *ReplicaSet) InitWithRetry(retry int, wait int) error {
 		if err != nil {
 			return errors.Wrap(err, "ReplicaSet init failed")
 		} else {
-			logrus.Infof("%v member %v is online", r.Name, member)
+			logging.GetLogger().Infof("%v member %v is online", r.Name, member)
 		}
 	}
 
@@ -101,7 +102,7 @@ func (r *ReplicaSet) WaitForPrimary(retry int, wait int) (bool, error) {
 			return true, nil
 		}
 		retry--
-		logrus.Warnf("No primary detected for set %v retying in %v seconds", r.Name, wait)
+		logging.GetLogger().Warnf("No primary detected for set %v retying in %v seconds", r.Name, wait)
 		time.Sleep(time.Duration(wait) * time.Second)
 	}
 
@@ -123,9 +124,9 @@ func (r *ReplicaSet) PrintStatus() error {
 		return errors.Wrapf(err, "%v replSetGetStatus failed", r.Name)
 	} else {
 		for _, m := range status.Members {
-			logrus.Infof("%v member %v state %v", status.Name, m.Name, m.StateStr)
+			logging.GetLogger().Infof("%v member %v state %v", status.Name, m.Name, m.StateStr)
 			if len(m.ErrMsg) > 0 {
-				logrus.Warnf("%v member %v error %v", status.Name, m.Name, m.ErrMsg)
+				logging.GetLogger().Warnf("%v member %v error %v", status.Name, m.Name, m.ErrMsg)
 			}
 		}
 	}
