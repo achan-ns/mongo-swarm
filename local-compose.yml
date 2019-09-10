@@ -1,4 +1,4 @@
-version: "3.4"
+version: "3.6"
 
 networks:
   net:
@@ -7,125 +7,103 @@ networks:
 services:
 
   data11:
-    image: mongo:3.4
+    image: mongo:3.6
     container_name: data11
-    command: mongod --shardsvr --replSet data1rs --smallfiles --port 27017
+    command: mongod --shardsvr --replSet data1rs --smallfiles --port 27017 --bind_ip_all
     expose:
       - 27017
     networks:
       - net
-    ports:
-      - 20011:27017
 
   data12:
-    image: mongo:3.4
+    image: mongo:3.6
     container_name: data12
-    command: mongod --shardsvr --replSet data1rs --smallfiles --port 27017
+    command: mongod --shardsvr --replSet data1rs --smallfiles --port 27017 --bind_ip_all
     expose:
       - 27017
     networks:
       - net
-    ports:
-      - 20012:27017
 
   data13:
-    image: mongo:3.4
+    image: mongo:3.6
     container_name: data13
-    command: mongod --shardsvr --replSet data1rs --smallfiles --port 27017
+    command: mongod --shardsvr --replSet data1rs --smallfiles --port 27017 --bind_ip_all
     expose:
       - 27017
     networks:
       - net
-    ports:
-      - 20013:27017
 
   data21:
-    image: mongo:3.4
+    image: mongo:3.6
     container_name: data21
-    command: mongod --shardsvr --replSet data2rs --smallfiles --port 27017
+    command: mongod --shardsvr --replSet data2rs --smallfiles --port 27017 --bind_ip_all
     expose:
       - 27017
     networks:
       - net
-    ports:
-      - 20021:27017
 
   data22:
-    image: mongo:3.4
+    image: mongo:3.6
     container_name: data22
-    command: mongod --shardsvr --replSet data2rs --smallfiles --port 27017
+    command: mongod --shardsvr --replSet data2rs --smallfiles --port 27017 --bind_ip_all
     expose:
       - 27017
     networks:
       - net
-    ports:
-      - 20022:27017
 
   data23:
-    image: mongo:3.4
+    image: mongo:3.6
     container_name: data23
-    command: mongod --shardsvr --replSet data2rs --smallfiles --port 27017
+    command: mongod --shardsvr --replSet data2rs --smallfiles --port 27017 --bind_ip_all
     expose:
       - 27017
     networks:
       - net
-    ports:
-      - 20023:27017
 
   cfg1:
-    image: mongo:3.4
+    image: mongo:3.6
     container_name: cfg1
-    command: mongod --configsvr --replSet cfgrs --smallfiles --port 27017
+    command: mongod --configsvr --replSet cfgrs --smallfiles --port 27017 --bind_ip_all
     expose:
       - 27017
     networks:
       - net
-    ports:
-      - 20101:27017
 
   cfg2:
-    image: mongo:3.4
+    image: mongo:3.6
     container_name: cfg2
-    command: mongod --configsvr --replSet cfgrs --smallfiles --port 27017
+    command: mongod --configsvr --replSet cfgrs --smallfiles --port 27017 --bind_ip_all
     expose:
       - 27017
     networks:
       - net
-    ports:
-      - 20102:27017
 
   cfg3:
-    image: mongo:3.4
+    image: mongo:3.6
     container_name: cfg3
-    command: mongod --configsvr --replSet cfgrs --smallfiles --port 27017
+    command: mongod --configsvr --replSet cfgrs --smallfiles --port 27017 --bind_ip_all
     expose:
       - 27017
     networks:
       - net
-    ports:
-      - 20103:27017
 
   mongos1:
-    image: mongo:3.4
+    image: mongo:3.6
     container_name: mongos1
-    command: mongos --configdb cfgrs/cfg1:27017,cfg2:27017,cfg3:27017
+    command: mongos --configdb cfgrs/cfg1:27017,cfg2:27017,cfg3:27017 --bind_ip_all
     expose:
       - 27017
     networks:
       - net
-    ports:
-      - 20111:27017
 
   mongos2:
-    image: mongo:3.4
+    image: mongo:3.6
     container_name: mongos2
-    command: mongos --configdb cfgrs/cfg1:27017,cfg2:27017,cfg3:27017
+    command: mongos --configdb cfgrs/cfg1:27017,cfg2:27017,cfg3:27017 --bind_ip_all
     expose:
       - 27017
     networks:
       - net
-    ports:
-      - 20112:27017
 
   bootstrap:
     build:
@@ -139,7 +117,5 @@ services:
       - '--dataSet=data2rs/data21:27017,data22:27017,data23:27017'
       - '--configSet=cfgrs/cfg1:27017,cfg2:27017,cfg3:27017'
       - '--mongos=mongos1:27017,mongos2:27017'
-    ports:
-      - 29090:9090
     networks:
       - net

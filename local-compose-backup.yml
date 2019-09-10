@@ -1,4 +1,4 @@
-version: "3.4"
+version: "3.6"
 
 networks:
   primary_net:
@@ -8,158 +8,130 @@ networks:
 services:
 
   backup-data11:
-    image: mongo:3.4
+    image: mongo:3.6
     container_name: backup-data11
-    command: mongod --shardsvr --replSet backup-data1rs --smallfiles --port 27017
+    command: mongod --shardsvr --replSet backup-data1rs --smallfiles --port 27017 --bind_ip_all
     expose:
       - 27017
     networks:
       - primary_net
-    ports:
-      - 30011:27017
 
   backup-data12:
-    image: mongo:3.4
+    image: mongo:3.6
     container_name: backup-data12
-    command: mongod --shardsvr --replSet backup-data1rs --smallfiles --port 27017
+    command: mongod --shardsvr --replSet backup-data1rs --smallfiles --port 27017 --bind_ip_all
     expose:
       - 27017
     networks:
       - primary_net
-    ports:
-      - 30012:27017
 
   backup-data13:
-    image: mongo:3.4
+    image: mongo:3.6
     container_name: backup-data13
-    command: mongod --shardsvr --replSet backup-data1rs --smallfiles --port 27017
+    command: mongod --shardsvr --replSet backup-data1rs --smallfiles --port 27017 --bind_ip_all
     expose:
       - 27017
     networks:
       - primary_net
-    ports:
-      - 30013:27017
 
   backup-data21:
-    image: mongo:3.4
+    image: mongo:3.6
     container_name: backup-data21
-    command: mongod --shardsvr --replSet backup-data2rs --smallfiles --port 27017
+    command: mongod --shardsvr --replSet backup-data2rs --smallfiles --port 27017 --bind_ip_all
     expose:
       - 27017
     networks:
       - primary_net
-    ports:
-      - 30021:27017
 
   backup-data22:
-    image: mongo:3.4
+    image: mongo:3.6
     container_name: backup-data22
-    command: mongod --shardsvr --replSet backup-data2rs --smallfiles --port 27017
+    command: mongod --shardsvr --replSet backup-data2rs --smallfiles --port 27017 --bind_ip_all
     expose:
       - 27017
     networks:
       - primary_net
-    ports:
-      - 30022:27017
 
   backup-data23:
-    image: mongo:3.4
+    image: mongo:3.6
     container_name: backup-data23
-    command: mongod --shardsvr --replSet backup-data2rs --smallfiles --port 27017
+    command: mongod --shardsvr --replSet backup-data2rs --smallfiles --port 27017 --bind_ip_all
     expose:
       - 27017
     networks:
       - primary_net
-    ports:
-      - 30023:27017
 
   backup-data31:
-    image: mongo:3.4
+    image: mongo:3.6
     container_name: backup-data31
-    command: mongod --shardsvr --replSet backup-data3rs --smallfiles --port 27017
+    command: mongod --shardsvr --replSet backup-data3rs --smallfiles --port 27017 --bind_ip_all
     expose:
       - 27017
     networks:
       - primary_net
-    ports:
-      - 30031:27017
 
   backup-data32:
-    image: mongo:3.4
+    image: mongo:3.6
     container_name: backup-data32
-    command: mongod --shardsvr --replSet backup-data3rs --smallfiles --port 27017
+    command: mongod --shardsvr --replSet backup-data3rs --smallfiles --port 27017 --bind_ip_all
     expose:
       - 27017
     networks:
       - primary_net
-    ports:
-      - 30032:27017
 
   backup-data33:
-    image: mongo:3.4
+    image: mongo:3.6
     container_name: backup-data33
-    command: mongod --shardsvr --replSet backup-data3rs --smallfiles --port 27017
+    command: mongod --shardsvr --replSet backup-data3rs --smallfiles --port 27017 --bind_ip_all
     expose:
       - 27017
     networks:
       - primary_net
-    ports:
-      - 30033:27017
 
   backup-cfg1:
-    image: mongo:3.4
+    image: mongo:3.6
     container_name: backup-cfg1
-    command: mongod --configsvr --replSet backup-cfgrs --smallfiles --port 27017
+    command: mongod --configsvr --replSet backup-cfgrs --smallfiles --port 27017 --bind_ip_all
     expose:
       - 27017
     networks:
       - primary_net
-    ports:
-      - 30101:27017
 
   backup-cfg2:
-    image: mongo:3.4
+    image: mongo:3.6
     container_name: backup-cfg2
-    command: mongod --configsvr --replSet backup-cfgrs --smallfiles --port 27017
+    command: mongod --configsvr --replSet backup-cfgrs --smallfiles --port 27017 --bind_ip_all
     expose:
       - 27017
     networks:
       - primary_net
-    ports:
-      - 30102:27017
 
   backup-cfg3:
-    image: mongo:3.4
+    image: mongo:3.6
     container_name: backup-cfg3
-    command: mongod --configsvr --replSet backup-cfgrs --smallfiles --port 27017
+    command: mongod --configsvr --replSet backup-cfgrs --smallfiles --port 27017 --bind_ip_all
     expose:
       - 27017
     networks:
       - primary_net
-    ports:
-      - 30103:27017
 
   backup-mongos1:
-    image: mongo:3.4
+    image: mongo:3.6
     container_name: backup-mongos1
-    command: mongos --configdb backup-cfgrs/backup-cfg1:27017,backup-cfg2:27017,backup-cfg3:27017
+    command: mongos --configdb backup-cfgrs/backup-cfg1:27017,backup-cfg2:27017,backup-cfg3:27017 --bind_ip_all
     expose:
       - 27017
     networks:
       - primary_net
-    ports:
-      - 30111:27017
 
   backup-mongos2:
-    image: mongo:3.4
+    image: mongo:3.6
     container_name: backup-mongos2
-    command: mongos --configdb backup-cfgrs/backup-cfg1:27017,backup-cfg2:27017,backup-cfg3:27017
+    command: mongos --configdb backup-cfgrs/backup-cfg1:27017,backup-cfg2:27017,backup-cfg3:27017 --bind_ip_all
     expose:
       - 27017
     networks:
       - primary_net
-    ports:
-      - 30112:27017
 
   backup-bootstrap:
     build:
@@ -174,7 +146,5 @@ services:
       - '--dataSet=backup-data3rs/backup-data31:27017,backup-data32:27017,backup-data33:27017'
       - '--configSet=backup-cfgrs/backup-cfg1:27017,backup-cfg2:27017,backup-cfg3:27017'
       - '--mongos=backup-mongos1:27017,backup-mongos2:27017'
-    ports:
-      - 39090:9090
     networks:
       - primary_net
