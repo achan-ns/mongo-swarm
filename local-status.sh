@@ -10,11 +10,19 @@ COLLECTION="test_col"
 WAIT_TIME=60 # in seconds
 
 echo "--------------------------------------------------" && \
+echo "Balancer State on SRC":
+docker run -it --rm --network $NETWORK_NAME mongo:$MONGO_VERSION mongo --host "$MONGOS1_SRC:$MONGOS1_PORT" $DATABASE --eval "
+	sh.getBalancerState()
+" &&
+
+echo "--------------------------------------------------" && \
+echo "Shard Distribution on SRC":
 docker run -it --rm --network $NETWORK_NAME mongo:$MONGO_VERSION mongo --host "$MONGOS1_SRC:$MONGOS1_PORT" $DATABASE --eval "
 	db.$COLLECTION.getShardDistribution()
 " &&
 
 echo "--------------------------------------------------" && \
+echo "Shard Distribution on DEST":
 docker run -it --rm --network $NETWORK_NAME mongo:$MONGO_VERSION mongo --host "$MONGOS1_DEST:$MONGOS1_PORT" $DATABASE --eval "
 	db.$COLLECTION.getShardDistribution()
 " &&
