@@ -1,8 +1,8 @@
 MONGO_VERSION=3.6
 NETWORK_NAME="primary_net"
 
-MONGOS1_SRC="mongos1"
-MONGOS1_DEST="backup-mongos1"
+MONGOS1_SRC="source-mongos1"
+MONGOS1_DEST="dest-mongos1"
 MONGOS1_PORT=27017
 DATABASE="test_db"
 COLLECTION="test_col"
@@ -23,13 +23,13 @@ echo "--------------------------------------------------" && \
 echo "sharding $DATABASE.$COLLECTION" && \
 docker run -it --rm --network $NETWORK_NAME mongo:$MONGO_VERSION mongo --host "$MONGOS1_SRC:$MONGOS1_PORT" $DATABASE --eval "sh.shardCollection('$DATABASE.$COLLECTION', {'item_id': 'hashed'})" && \
 
-echo "--------------------------------------------------" && \
-echo "enabling sharding..." && \
-docker run -it --rm --network $NETWORK_NAME mongo:$MONGO_VERSION mongo --host "$MONGOS1_DEST:$MONGOS1_PORT" $DATABASE --eval "sh.enableSharding('$DATABASE')" && \
+# echo "--------------------------------------------------" && \
+# echo "enabling sharding..." && \
+# docker run -it --rm --network $NETWORK_NAME mongo:$MONGO_VERSION mongo --host "$MONGOS1_DEST:$MONGOS1_PORT" $DATABASE --eval "sh.enableSharding('$DATABASE')" && \
 
-echo "--------------------------------------------------" && \
-echo "sharding $DATABASE.$COLLECTION" && \
-docker run -it --rm --network $NETWORK_NAME mongo:$MONGO_VERSION mongo --host "$MONGOS1_DEST:$MONGOS1_PORT" $DATABASE --eval "sh.shardCollection('$DATABASE.$COLLECTION', {'item_id': 'hashed'})" && \
+# echo "--------------------------------------------------" && \
+# echo "sharding $DATABASE.$COLLECTION" && \
+# docker run -it --rm --network $NETWORK_NAME mongo:$MONGO_VERSION mongo --host "$MONGOS1_DEST:$MONGOS1_PORT" $DATABASE --eval "sh.shardCollection('$DATABASE.$COLLECTION', {'item_id': 'hashed'})" && \
 
 # echo "--------------------------------------------------" && \
 # echo "simulating 10 ingestions from 10 different sources" && \

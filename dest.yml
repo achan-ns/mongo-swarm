@@ -1,0 +1,206 @@
+
+version: "3.6"
+
+networks:
+  primary_net:
+      external: true
+
+services:
+
+  dest-data00:
+    image: mongo:3.6
+    container_name: dest-data00
+    command: mongod --shardsvr --replSet dest-data0rs --smallfiles --port 27017 --bind_ip_all
+    expose:
+      -  27017
+    networks:
+      - primary_net
+
+  dest-data01:
+    image: mongo:3.6
+    container_name: dest-data01
+    command: mongod --shardsvr --replSet dest-data0rs --smallfiles --port 27017 --bind_ip_all
+    expose:
+      -  27017
+    networks:
+      - primary_net
+
+  dest-data02:
+    image: mongo:3.6
+    container_name: dest-data02
+    command: mongod --shardsvr --replSet dest-data0rs --smallfiles --port 27017 --bind_ip_all
+    expose:
+      -  27017
+    networks:
+      - primary_net
+
+  dest-data03:
+    image: mongo:3.6
+    container_name: dest-data03
+    command: mongod --shardsvr --replSet dest-data0rs --smallfiles --port 27017 --bind_ip_all
+    expose:
+      -  27017
+    networks:
+      - primary_net
+
+  dest-data04:
+    image: mongo:3.6
+    container_name: dest-data04
+    command: mongod --shardsvr --replSet dest-data0rs --smallfiles --port 27017 --bind_ip_all
+    expose:
+      -  27017
+    networks:
+      - primary_net
+
+  dest-data10:
+    image: mongo:3.6
+    container_name: dest-data10
+    command: mongod --shardsvr --replSet dest-data1rs --smallfiles --port 27017 --bind_ip_all
+    expose:
+      -  27017
+    networks:
+      - primary_net
+
+  dest-data11:
+    image: mongo:3.6
+    container_name: dest-data11
+    command: mongod --shardsvr --replSet dest-data1rs --smallfiles --port 27017 --bind_ip_all
+    expose:
+      -  27017
+    networks:
+      - primary_net
+
+  dest-data12:
+    image: mongo:3.6
+    container_name: dest-data12
+    command: mongod --shardsvr --replSet dest-data1rs --smallfiles --port 27017 --bind_ip_all
+    expose:
+      -  27017
+    networks:
+      - primary_net
+
+  dest-data13:
+    image: mongo:3.6
+    container_name: dest-data13
+    command: mongod --shardsvr --replSet dest-data1rs --smallfiles --port 27017 --bind_ip_all
+    expose:
+      -  27017
+    networks:
+      - primary_net
+
+  dest-data14:
+    image: mongo:3.6
+    container_name: dest-data14
+    command: mongod --shardsvr --replSet dest-data1rs --smallfiles --port 27017 --bind_ip_all
+    expose:
+      -  27017
+    networks:
+      - primary_net
+
+  dest-data20:
+    image: mongo:3.6
+    container_name: dest-data20
+    command: mongod --shardsvr --replSet dest-data2rs --smallfiles --port 27017 --bind_ip_all
+    expose:
+      -  27017
+    networks:
+      - primary_net
+
+  dest-data21:
+    image: mongo:3.6
+    container_name: dest-data21
+    command: mongod --shardsvr --replSet dest-data2rs --smallfiles --port 27017 --bind_ip_all
+    expose:
+      -  27017
+    networks:
+      - primary_net
+
+  dest-data22:
+    image: mongo:3.6
+    container_name: dest-data22
+    command: mongod --shardsvr --replSet dest-data2rs --smallfiles --port 27017 --bind_ip_all
+    expose:
+      -  27017
+    networks:
+      - primary_net
+
+  dest-data23:
+    image: mongo:3.6
+    container_name: dest-data23
+    command: mongod --shardsvr --replSet dest-data2rs --smallfiles --port 27017 --bind_ip_all
+    expose:
+      -  27017
+    networks:
+      - primary_net
+
+  dest-data24:
+    image: mongo:3.6
+    container_name: dest-data24
+    command: mongod --shardsvr --replSet dest-data2rs --smallfiles --port 27017 --bind_ip_all
+    expose:
+      -  27017
+    networks:
+      - primary_net
+
+  dest-cfg0:
+    image: mongo:3.6
+    container_name: dest-cfg0
+    command: mongod --configsvr --replSet dest-cfgrs --smallfiles --port 27017 --bind_ip_all
+    expose:
+      -  27017
+    networks:
+      - primary_net
+
+  dest-cfg1:
+    image: mongo:3.6
+    container_name: dest-cfg1
+    command: mongod --configsvr --replSet dest-cfgrs --smallfiles --port 27017 --bind_ip_all
+    expose:
+      -  27017
+    networks:
+      - primary_net
+
+  dest-cfg2:
+    image: mongo:3.6
+    container_name: dest-cfg2
+    command: mongod --configsvr --replSet dest-cfgrs --smallfiles --port 27017 --bind_ip_all
+    expose:
+      -  27017
+    networks:
+      - primary_net
+
+  dest-mongos0:
+    image: mongo:3.6
+    container_name: dest-mongos0
+    command: mongos --configdb dest-cfgrs/dest-cfg0:27017,dest-cfg1:27017,dest-cfg2:27017 --bind_ip_all
+    expose:
+      -  27017
+    networks:
+      - primary_net
+
+  dest-mongos1:
+    image: mongo:3.6
+    container_name: dest-mongos1
+    command: mongos --configdb dest-cfgrs/dest-cfg0:27017,dest-cfg1:27017,dest-cfg2:27017 --bind_ip_all
+    expose:
+      -  27017
+    networks:
+      - primary_net
+
+  dest-bootstrap:
+    build:
+      context: bootstrap/
+      dockerfile: Dockerfile
+      args:
+        - GITHUB_TOKEN
+    container_name: dest-mongo-bootstrap
+    command:
+      - "--dataSet=dest-data0rs/dest-data00:27017,dest-data01:27017,dest-data02:27017,dest-data03:27017,dest-data04:27017"
+      - "--dataSet=dest-data1rs/dest-data10:27017,dest-data11:27017,dest-data12:27017,dest-data13:27017,dest-data14:27017"
+      - "--dataSet=dest-data2rs/dest-data20:27017,dest-data21:27017,dest-data22:27017,dest-data23:27017,dest-data24:27017"
+      - "--configSet=dest-cfgrs/dest-cfg0:27017,dest-cfg1:27017,dest-cfg2:27017"
+      - "--mongos=dest-mongos0:27017,dest-mongos1:27017"
+
+    networks:
+      - primary_net
+

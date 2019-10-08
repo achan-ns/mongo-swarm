@@ -1,8 +1,8 @@
 MONGO_VERSION=3.6
 NETWORK_NAME="primary_net"
 
-MONGOS1_SRC="mongos1"
-MONGOS1_DEST="backup-mongos1"
+MONGOS1_SRC="source-mongos1"
+MONGOS1_DEST="dest-mongos1"
 MONGOS1_PORT=27017
 DATABASE="test_db"
 COLLECTION="test_col"

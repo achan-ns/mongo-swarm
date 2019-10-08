@@ -1,0 +1,160 @@
+
+version: "3.6"
+
+networks:
+  primary_net:
+      external: true
+
+services:
+
+  source-data00:
+    image: mongo:3.6
+    container_name: source-data00
+    command: mongod --shardsvr --replSet source-data0rs --smallfiles --port 27017 --bind_ip_all
+    expose:
+      -  27017
+    networks:
+      - primary_net
+
+  source-data01:
+    image: mongo:3.6
+    container_name: source-data01
+    command: mongod --shardsvr --replSet source-data0rs --smallfiles --port 27017 --bind_ip_all
+    expose:
+      -  27017
+    networks:
+      - primary_net
+
+  source-data02:
+    image: mongo:3.6
+    container_name: source-data02
+    command: mongod --shardsvr --replSet source-data0rs --smallfiles --port 27017 --bind_ip_all
+    expose:
+      -  27017
+    networks:
+      - primary_net
+
+  source-data03:
+    image: mongo:3.6
+    container_name: source-data03
+    command: mongod --shardsvr --replSet source-data0rs --smallfiles --port 27017 --bind_ip_all
+    expose:
+      -  27017
+    networks:
+      - primary_net
+
+  source-data04:
+    image: mongo:3.6
+    container_name: source-data04
+    command: mongod --shardsvr --replSet source-data0rs --smallfiles --port 27017 --bind_ip_all
+    expose:
+      -  27017
+    networks:
+      - primary_net
+
+  source-data10:
+    image: mongo:3.6
+    container_name: source-data10
+    command: mongod --shardsvr --replSet source-data1rs --smallfiles --port 27017 --bind_ip_all
+    expose:
+      -  27017
+    networks:
+      - primary_net
+
+  source-data11:
+    image: mongo:3.6
+    container_name: source-data11
+    command: mongod --shardsvr --replSet source-data1rs --smallfiles --port 27017 --bind_ip_all
+    expose:
+      -  27017
+    networks:
+      - primary_net
+
+  source-data12:
+    image: mongo:3.6
+    container_name: source-data12
+    command: mongod --shardsvr --replSet source-data1rs --smallfiles --port 27017 --bind_ip_all
+    expose:
+      -  27017
+    networks:
+      - primary_net
+
+  source-data13:
+    image: mongo:3.6
+    container_name: source-data13
+    command: mongod --shardsvr --replSet source-data1rs --smallfiles --port 27017 --bind_ip_all
+    expose:
+      -  27017
+    networks:
+      - primary_net
+
+  source-data14:
+    image: mongo:3.6
+    container_name: source-data14
+    command: mongod --shardsvr --replSet source-data1rs --smallfiles --port 27017 --bind_ip_all
+    expose:
+      -  27017
+    networks:
+      - primary_net
+
+  source-cfg0:
+    image: mongo:3.6
+    container_name: source-cfg0
+    command: mongod --configsvr --replSet source-cfgrs --smallfiles --port 27017 --bind_ip_all
+    expose:
+      -  27017
+    networks:
+      - primary_net
+
+  source-cfg1:
+    image: mongo:3.6
+    container_name: source-cfg1
+    command: mongod --configsvr --replSet source-cfgrs --smallfiles --port 27017 --bind_ip_all
+    expose:
+      -  27017
+    networks:
+      - primary_net
+
+  source-cfg2:
+    image: mongo:3.6
+    container_name: source-cfg2
+    command: mongod --configsvr --replSet source-cfgrs --smallfiles --port 27017 --bind_ip_all
+    expose:
+      -  27017
+    networks:
+      - primary_net
+
+  source-mongos0:
+    image: mongo:3.6
+    container_name: source-mongos0
+    command: mongos --configdb source-cfgrs/source-cfg0:27017,source-cfg1:27017,source-cfg2:27017 --bind_ip_all
+    expose:
+      -  27017
+    networks:
+      - primary_net
+
+  source-mongos1:
+    image: mongo:3.6
+    container_name: source-mongos1
+    command: mongos --configdb source-cfgrs/source-cfg0:27017,source-cfg1:27017,source-cfg2:27017 --bind_ip_all
+    expose:
+      -  27017
+    networks:
+      - primary_net
+
+  source-bootstrap:
+    build:
+      context: bootstrap/
+      dockerfile: Dockerfile
+      args:
+        - GITHUB_TOKEN
+    container_name: source-mongo-bootstrap
+    command:
+      - "--dataSet=source-data0rs/source-data00:27017,source-data01:27017,source-data02:27017,source-data03:27017,source-data04:27017"
+      - "--dataSet=source-data1rs/source-data10:27017,source-data11:27017,source-data12:27017,source-data13:27017,source-data14:27017"
+      - "--configSet=source-cfgrs/source-cfg0:27017,source-cfg1:27017,source-cfg2:27017"
+      - "--mongos=source-mongos0:27017,source-mongos1:27017"
+
+    networks:
+      - primary_net
+
